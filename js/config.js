@@ -21,6 +21,9 @@ const SITE_CONFIG = {
 
 // API站点配置
 const API_SITES = {
+    
+}
+const API_SITESS = {
     heimuer: {
         api: 'https://json.heimuer.xyz',
         name: '黑木耳',
@@ -204,4 +207,4 @@ const CUSTOM_API_CONFIG = {
 };
 
 // 新增隐藏内置黄色采集站API的变量，默认为true
-const HIDE_BUILTIN_ADULT_APIS =false;
+const HIDE_BUILTIN_ADULT_APIS =true;
