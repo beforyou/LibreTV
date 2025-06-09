@@ -21,9 +21,6 @@ const SITE_CONFIG = {
 
 // API站点配置
 const API_SITES = {
-    
-}
-const API_SITESS = {
     heimuer: {
         api: 'https://json.heimuer.xyz',
         name: '黑木耳',
