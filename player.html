@@ -288,7 +288,7 @@
         
         // 注入服务器端环境变量 (将由服务器端替换)
         // PASSWORD 变量将在这里被服务器端注入
-        window.__ENV__.PASSWORD = "{{PASSWORD}}";
+        window.__ENV__.PASSWORD = "2025";
 
         // =================================
         // ============== PLAYER ==========
@@ -575,13 +575,13 @@
                 chromecast: true,                // 启用Chromecast投屏功能
                 contextmenu: [                   // 自定义右键菜单
                     {
-                        text: '关于 LibreTV',
-                        link: 'https://github.com/bestzwei/LibreTV'
+                        text: '关于TV',
+                        link: ''
                     },
                     {
                         text: '问题反馈',
                         click: (player) => {
-                            window.open('https://github.com/bestzwei/LibreTV/issues', '_blank');
+                            window.open('', '_blank');
                         }
                     }
                 ],
