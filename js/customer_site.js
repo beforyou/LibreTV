@@ -1,5 +1,4 @@
 const CUSTOMER_SITES = {
- heimuer: {
     tyyszy: {
         api: 'https://tyyszy.com/api.php/provide/vod',
         name: '天涯资源',
