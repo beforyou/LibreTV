@@ -1,48 +1,47 @@
 const CUSTOMER_SITES = {
  heimuer: {
-        api: 'https://json02.heimuer.xyz',
+        api: 'https://json02.heimuer.xyz/api.php/provide/vod',
         name: '黑木耳',
-        detail: 'https://heimuer.xyz'
     },
     tyyszy: {
-        api: 'https://tyyszy.com',
+        api: 'https://tyyszy.com/api.php/provide/vod',
         name: '天涯资源',
     },
     zy360: {
-        api: 'https://360zy.com',
+        api: 'https://360zy.com/api.php/provide/vod',
         name: '360资源',
     },
     wolong: {
-        api: 'https://wolongzyw.com',
+        api: 'https://wolongzyw.com/api.php/provide/vod',
         name: '卧龙资源',
     },
     cjhw: {
-        api: 'https://cjhwba.com',
+        api: 'https://cjhwba.com/api.php/provide/vod',
         name: '新华为',
     },
     jisu: {
-        api: 'https://jszyapi.com',
+        api: 'https://jszyapi.com/api.php/provide/vod',
         name: '极速资源',
         detail: 'https://jszyapi.com'
     },
     dbzy: {
-        api: 'https://dbzy.com',
+        api: 'https://dbzy.com/api.php/provide/vod',
         name: '豆瓣资源',
     },
     bfzy: {
-        api: 'https://bfzyapi.com',
+        api: 'https://bfzyapi.com/api.php/provide/vod',
         name: '暴风资源',
     },
     mozhua: {
-        api: 'https://mozhuazy.com',
+        api: 'https://mozhuazy.com/api.php/provide/vod',
         name: '魔爪资源',
     },
     mdzy: {
-        api: 'https://www.mdzyapi.com',
+        api: 'https://www.mdzyapi.com/api.php/provide/vod',
         name: '魔都资源',
     },
     ruyi: {
-        api: 'https://cj.rycjapi.com',
+        api: 'https://cj.rycjapi.com/api.php/provide/vod',
         name: '如意资源',
     }
 };
