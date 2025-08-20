@@ -8,11 +8,6 @@ const CUSTOMER_SITES = {
         api: 'https://tyyszy.com',
         name: '天涯资源',
     },
-    ckzy: {
-        api: 'https://www.ckzy1.com',
-        name: 'CK资源',
-        adult: true
-    },
     zy360: {
         api: 'https://360zy.com',
         name: '360资源',
