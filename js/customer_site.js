@@ -3,10 +3,10 @@ const CUSTOMER_SITES = {
         api: 'http://caiji.dyttzyapi.com/api.php/provide/vod',
         name: '电影天堂资源',
     },
-    1080: {
-        api: 'https://api.1080zyku.com/inc/api_mac10.php/provide/vod',
-        name: '1080资源',
-    },
+//    1080: {
+//        api: 'https://api.1080zyku.com/inc/api_mac10.php/provide/vod',
+//        name: '1080资源',
+//    },
     ruyi: {
         api: 'http://cj.rycjapi.com/api.php/provide/vod',
         name: '如意资源',
