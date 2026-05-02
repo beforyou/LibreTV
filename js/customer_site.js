@@ -44,12 +44,7 @@ detail: 'http://caiji.dyttzyapi.com',
     ruyi: {
         api: 'https://cj.rycjapi.com/api.php/provide/vod',
         name: '如意资源',
-    }, */
-    cjhw: {
-        api: 'https://cjhwba.com/api.php/provide/vod',
-        name: '新华为'
-    },
-         
+    }, */     
      hnyb: {
         api: 'https://www.hongniuzy2.com/api.php/provide/vod/',
         name: '红牛云播'
