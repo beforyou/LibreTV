@@ -60,7 +60,7 @@ detail: 'http://caiji.dyttzyapi.com',
     },
     bfzy: {
         api: 'https://bfzyapi.com/api.php/provide/vod',
-        name: '暴风资源',
+        name: '暴风资源'
     },
     bfzy: {
         api: 'http://aosikazy.com/api.php/provide/vod',
