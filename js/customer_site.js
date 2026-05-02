@@ -1,5 +1,5 @@
 const CUSTOMER_SITES = {
-    tyyszy: {
+/*    tyyszy: {
         api: 'https://tyyszy.com/api.php/provide/vod',
         name: '天涯资源',
     },
@@ -33,6 +33,18 @@ detail: 'http://caiji.dyttzyapi.com',
         api: 'https://wolongzyw.com/api.php/provide/vod',
         name: '卧龙资源',
     },
+    mozhua: {
+        api: 'https://mozhuazy.com/api.php/provide/vod',
+        name: '魔爪资源',
+    },
+    mdzy: {
+        api: 'https://www.mdzyapi.com/api.php/provide/vod',
+        name: '魔都资源',
+    },
+    ruyi: {
+        api: 'https://cj.rycjapi.com/api.php/provide/vod',
+        name: '如意资源',
+    }, */
     cjhw: {
         api: 'https://cjhwba.com/api.php/provide/vod',
         name: '新华为',
@@ -49,18 +61,6 @@ detail: 'http://caiji.dyttzyapi.com',
     bfzy: {
         api: 'https://bfzyapi.com/api.php/provide/vod',
         name: '暴风资源',
-    },
-    mozhua: {
-        api: 'https://mozhuazy.com/api.php/provide/vod',
-        name: '魔爪资源',
-    },
-    mdzy: {
-        api: 'https://www.mdzyapi.com/api.php/provide/vod',
-        name: '魔都资源',
-    },
-    ruyi: {
-        api: 'https://cj.rycjapi.com/api.php/provide/vod',
-        name: '如意资源',
     }
 };
 
