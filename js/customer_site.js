@@ -67,11 +67,6 @@ const CUSTOMER_SITES = {
         api: 'https://wwzy.tv/api.php/provide/vod',
         name: '旺旺短剧',
     },
-
-    lzi: {
-        api: 'https://cj.lziapi.com/api.php/provide/vod',
-        name: '量子资源站',
-    },
     askzy: {
         api: 'http://aosikazy.com/api.php/provide/vod',
         name: '奥斯卡',
