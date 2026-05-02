@@ -47,11 +47,15 @@ detail: 'http://caiji.dyttzyapi.com',
     }, */
     cjhw: {
         api: 'https://cjhwba.com/api.php/provide/vod',
-        name: '新华为',
+        name: '新华为'
     },
     cjhw: {
         api: 'https://cj.lziapi.com/api.php/provide/vod/',
-        name: '影视工厂',
+        name: '影视工厂'
+    },
+        hyzy: {
+        api: 'https://www.huyaapi.com/api.php/provide/vod/',
+        name: '虎牙'
     },
     plzy: {
         api: 'https://p2100.net/api.php/provide/vod/',
@@ -64,7 +68,7 @@ detail: 'http://caiji.dyttzyapi.com',
     },
     dbzy: {
         api: 'https://dbzy.com/api.php/provide/vod',
-        name: '豆瓣资源',
+        name: '豆瓣资源'
     },
     bfzy: {
         api: 'https://bfzyapi.com/api.php/provide/vod',
