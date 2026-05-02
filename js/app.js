@@ -1,5 +1,5 @@
 // 全局变量
-let selectedAPIs = JSON.parse(localStorage.getItem('selectedAPIs') || '["bfzy","1080"]'); // 默认选中资源
+let selectedAPIs = JSON.parse(localStorage.getItem('selectedAPIs') || '["1080","bfzy"]'); // 默认选中资源
 let customAPIs = JSON.parse(localStorage.getItem('customAPIs') || '[]'); // 存储自定义API列表
 
 // 添加当前播放的集数索引
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // 设置默认API选择（如果是第一次加载）
     if (!localStorage.getItem('hasInitializedDefaults')) {
         // 默认选中资源
-        selectedAPIs = ["bfzy","1080"];
+        selectedAPIs = ["1080","bfzy"];
         localStorage.setItem('selectedAPIs', JSON.stringify(selectedAPIs));
 
         // 默认选中过滤开关
@@ -190,7 +190,7 @@ function checkAdultAPIsSelected() {
         }
     } else {
         // 启用黄色内容过滤器
-        yellowFilterToggle.disabled = true;
+        yellowFilterToggle.disabled = false;
         yellowFilterContainer.classList.remove('filter-disabled');
 
         // 恢复原来的描述文字
@@ -584,7 +584,7 @@ function resetSearchArea() {
     try {
         window.history.pushState(
             {},
-            `L TV - 免费在线视频搜索与观看平台`,
+            `LibreTV - 免费在线视频搜索与观看平台`,
             `/`
         );
         // 更新页面标题
@@ -752,7 +752,7 @@ async function search() {
                     <div class="flex h-full">
                         ${hasCover ? `
                         <div class="relative flex-shrink-0 search-card-img-container">
-                            <img src="${item.vod_pic}" alt="${safeName}" 
+                            <img src="https://douban-proxy.jean19830527.workers.dev/?url=${item.vod_pic}" alt="${safeName}" 
                                  class="h-full w-full object-cover transition-transform hover:scale-110" 
                                  onerror="this.onerror=null; this.src='https://via.placeholder.com/300x450?text=无封面'; this.classList.add('object-contain');" 
                                  loading="lazy">
