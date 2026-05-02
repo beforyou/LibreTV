@@ -3,9 +3,9 @@ const CUSTOMER_SITES = {
         api: 'http://caiji.dyttzyapi.com/api.php/provide/vod',
         name: '电影天堂资源',
     },
-    heimuer: {
-        api: 'https://json.heimuer.xyz/api.php/provide/vod',
-        name: '黑木耳',
+    1080: {
+        api: 'https://api.1080zyku.com/inc/api_mac10.php/provide/vod',
+        name: '1080资源',
     },
     ruyi: {
         api: 'http://cj.rycjapi.com/api.php/provide/vod',
@@ -67,18 +67,46 @@ const CUSTOMER_SITES = {
         api: 'https://wwzy.tv/api.php/provide/vod',
         name: '旺旺短剧',
     },
-    ikun: {
-        api: 'https://ikunzyapi.com/api.php/provide/vod',
-        name: 'iKun资源',
-    },
+
     lzi: {
         api: 'https://cj.lziapi.com/api.php/provide/vod',
         name: '量子资源站',
     },
-    xiaomaomi: {
-        api: 'https://zy.xmm.hk/api.php/provide/vod',
-        name: '小猫咪资源',
-},
+    askzy: {
+        api: 'http://aosikazy.com/api.php/provide/vod',
+        name: '奥斯卡',
+        adult: true
+    },
+    slzy: {
+        api: 'https://slapibf.com/api.php/provide/vod',
+        name: '森林',
+        adult: true
+    },
+    nxx: {
+        api: 'https://naixxzy.com/api.php/provide/vod/',
+        name: '奶香香',
+        adult: true
+    },
+    dnzy: {
+        api: 'https://apidanaizi.com/api.php/provide/vod',
+        name: '大奶',
+        adult: true
+    },
+    ljzy: {
+        api: 'https://apilj.com/api.php/provide/vod/',
+        name: '辣椒',
+        adult: true
+    },
+    jzy: {
+        api: 'https://www.jingpinx.com/api.php/provide/vod/',
+        name: '精品',
+        adult: true
+    },
+    155: {
+        api: 'https://155api.com/api.php/provide/vod',
+        name: '155资源',
+        adult: true
+    },
 };
 
 // 调用全局方法合并
