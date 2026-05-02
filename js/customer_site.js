@@ -53,9 +53,9 @@ detail: 'http://caiji.dyttzyapi.com',
         api: 'https://cj.lziapi.com/api.php/provide/vod/',
         name: '影视工厂',
     },
-    1080: {
-        api: 'https://api.1080zyku.com/inc/api_mac10.php',
-        name: '1080'
+    plzy: {
+        api: 'https://p2100.net/api.php/provide/vod/',
+        name: '飘零资源'
     },
     jisu: {
         api: 'https://jszyapi.com/api.php/provide/vod',
