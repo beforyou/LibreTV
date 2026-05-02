@@ -697,16 +697,16 @@ function initPlayer(videoUrl) {
         if (window.isSwitchingVideo) {
             return;
         }
-/*
+
         // 隐藏所有加载指示器
         const loadingElements = document.querySelectorAll('#player-loading, .player-loading-container');
         loadingElements.forEach(el => {
             if (el) el.style.display = 'none';
         });
 
-        showError('视频播放失败: ' + (error.message || '未知错误'));
+       // showError('视频播放失败: ' + (error.message || '未知错误'));
     });
-*/
+
     // 添加移动端长按三倍速播放功能
     setupLongPressSpeedControl();
 
