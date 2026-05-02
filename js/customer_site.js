@@ -49,6 +49,14 @@ detail: 'http://caiji.dyttzyapi.com',
         api: 'https://cjhwba.com/api.php/provide/vod',
         name: '新华为',
     },
+    cjhw: {
+        api: 'https://cj.lziapi.com/api.php/provide/vod/',
+        name: '影视工厂',
+    },
+    1080: {
+        api: 'https://api.1080zyku.com/inc/api_mac10.php',
+        name: '1080'
+    },
     jisu: {
         api: 'https://jszyapi.com/api.php/provide/vod',
         name: '极速资源',
@@ -91,8 +99,12 @@ detail: 'http://caiji.dyttzyapi.com',
         api: 'https://www.jingpinx.com/api.php/provide/vod/',
         name: '精品',
         adult: true
-    }
-
+    },
+    155: {
+        api: 'https://155api.com/api.php/provide/vod',
+        name: '155资源',
+        adult: true
+    },
 
 
         
