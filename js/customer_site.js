@@ -49,13 +49,22 @@ detail: 'http://caiji.dyttzyapi.com',
         api: 'https://cjhwba.com/api.php/provide/vod',
         name: '新华为'
     },
-    cjhw: {
+         
+     hnyb: {
+        api: 'https://www.hongniuzy2.com/api.php/provide/vod/',
+        name: '红牛云播'
+    },
+    xlzy: {
+        api: 'http://api.xinlangapi.com/xinlangapi.php/provide/vod/',
+        name: '新浪资源'
+    },
+    ysgc: {
         api: 'https://cj.lziapi.com/api.php/provide/vod/',
         name: '影视工厂'
     },
         hyzy: {
         api: 'https://www.huyaapi.com/api.php/provide/vod/',
-        name: '虎牙'
+        name: '虎牙资源'
     },
     plzy: {
         api: 'https://p2100.net/api.php/provide/vod/',
