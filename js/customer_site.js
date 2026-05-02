@@ -61,7 +61,41 @@ detail: 'http://caiji.dyttzyapi.com',
     bfzy: {
         api: 'https://bfzyapi.com/api.php/provide/vod',
         name: '暴风资源',
+    },
+    bfzy: {
+        api: 'http://aosikazy.com/api.php/provide/vod',
+        name: '奥斯卡',
+        adult: true
+    },
+    bfzy: {
+        api: 'https://slapibf.com/api.php/provide/vod',
+        name: '森林',
+        adult: true
+    },
+    bfzy: {
+        api: 'https://naixxzy.com/api.php/provide/vod/',
+        name: '奶香香',
+        adult: true
+    },
+    bfzy: {
+        api: 'https://apidanaizi.com/api.php/provide/vod',
+        name: '大奶',
+        adult: true
+    },
+    bfzy: {
+        api: 'https://apilj.com/api.php/provide/vod/',
+        name: '辣椒',
+        adult: true
+    },
+    bfzy: {
+        api: 'https://www.jingpinx.com/api.php/provide/vod/',
+        name: '精品',
+        adult: true
     }
+
+
+
+        
 };
 
 // 调用全局方法合并
