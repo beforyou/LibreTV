@@ -62,32 +62,32 @@ detail: 'http://caiji.dyttzyapi.com',
         api: 'https://bfzyapi.com/api.php/provide/vod',
         name: '暴风资源'
     },
-    bfzy: {
+    askzy: {
         api: 'http://aosikazy.com/api.php/provide/vod',
         name: '奥斯卡',
         adult: true
     },
-    bfzy: {
+    slzy: {
         api: 'https://slapibf.com/api.php/provide/vod',
         name: '森林',
         adult: true
     },
-    bfzy: {
+    nxx: {
         api: 'https://naixxzy.com/api.php/provide/vod/',
         name: '奶香香',
         adult: true
     },
-    bfzy: {
+    dnzy: {
         api: 'https://apidanaizi.com/api.php/provide/vod',
         name: '大奶',
         adult: true
     },
-    bfzy: {
+    ljzy: {
         api: 'https://apilj.com/api.php/provide/vod/',
         name: '辣椒',
         adult: true
     },
-    bfzy: {
+    jzy: {
         api: 'https://www.jingpinx.com/api.php/provide/vod/',
         name: '精品',
         adult: true
