@@ -67,16 +67,16 @@ const CUSTOMER_SITES = {
         api: 'https://wwzy.tv/api.php/provide/vod',
         name: '旺旺短剧',
     },
-    askzy: {
-        api: 'http://aosikazy.com/api.php/provide/vod',
-        name: '奥斯卡',
-        adult: true
-    },
-    slzy: {
-        api: 'https://slapibf.com/api.php/provide/vod',
-        name: '森林',
-        adult: true
-    },
+//    askzy: {
+//        api: 'http://aosikazy.com/api.php/provide/vod',
+//        name: '奥斯卡',
+//        adult: true
+//    },
+//    slzy: {
+//        api: 'https://slapibf.com/api.php/provide/vod',
+//        name: '森林',
+//        adult: true
+//    },
     nxx: {
         api: 'https://naixxzy.com/api.php/provide/vod/',
         name: '奶香香',
