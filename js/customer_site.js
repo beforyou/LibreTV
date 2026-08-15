@@ -77,7 +77,37 @@ const CUSTOMER_SITES = {
 //        name: '森林',
 //        adult: true
 //    },
-    nxx: {
+//
+    xjzy: {
+        api: 'https://api.xiaojizy.live/provide/vod',
+        name: '小鸡',
+        adult: true
+    },
+    xxizy: {
+        api: 'https://www.xxibaozyw.com/api.php/provide/vod',
+        name: 'X细胞',
+        adult: true
+    },
+    xnrzy: {
+        api: 'https://www.gdlsp.com/api/json.php',
+        name: '香奶',
+        adult: true
+    },
+    yutzy: {
+        api: 'https://yutuzy10.com/api.php/provide/vod',
+        name: '玉兔',
+        adult: true
+    },
+    155zy: {
+        api: 'https://155api.com/api.php/provide/vod ',
+        name: '155',
+        adult: true
+    },    
+ 
+        
+       
+////////////////////////////////////        
+        nxx: {
         api: 'https://naixxzy.com/api.php/provide/vod/',
         name: '奶香香',
         adult: true
