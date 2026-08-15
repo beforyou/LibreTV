@@ -98,11 +98,6 @@ const CUSTOMER_SITES = {
         name: '玉兔',
         adult: true
     },
-    155zy: {
-        api: 'https://155api.com/api.php/provide/vod ',
-        name: '155',
-        adult: true
-    },    
  
         
        
