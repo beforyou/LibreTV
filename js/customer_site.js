@@ -84,32 +84,7 @@ const CUSTOMER_SITES = {
         name: '155',
         adult: true
     },
-////////////////////////////////////        
-        nxx: {
-        api: 'https://naixxzy.com/api.php/provide/vod/',
-        name: '奶香香',
-        adult: true
-    },
-    dnzy: {
-        api: 'https://apidanaizi.com/api.php/provide/vod',
-        name: '大奶',
-        adult: true
-    },
-    ljzy: {
-        api: 'https://apilj.com/api.php/provide/vod/',
-        name: '辣椒',
-        adult: true
-    },
-    jzy: {
-        api: 'https://www.jingpinx.com/api.php/provide/vod/',
-        name: '精品',
-        adult: true
-    },
-    155: {
-        api: 'https://155api.com/api.php/provide/vod',
-        name: '155资源',
-        adult: true
-    },
+
 };
 
 // 调用全局方法合并
