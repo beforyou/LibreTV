@@ -59,6 +59,57 @@ const CUSTOMER_SITES = {
         api: 'https://wwzy.tv/api.php/provide/vod',
         name: '旺旺短剧',
     },
+    xjzy: {
+        api: 'https://api.xiaojizy.live/provide/vod',
+        name: '小鸡',
+        adult: true
+    },
+    xxizy: {
+        api: 'https://www.xxibaozyw.com/api.php/provide/vod',
+        name: 'X细胞',
+        adult: true
+    },
+    xnrzy: {
+        api: 'https://www.gdlsp.com/api/json.php',
+        name: '香奶',
+        adult: true
+    },
+    yutzy: {
+        api: 'https://yutuzy10.com/api.php/provide/vod',
+        name: '玉兔',
+        adult: true
+    },
+    155zy: {
+        api: 'https://155api.com/api.php/provide/vod ',
+        name: '155',
+        adult: true
+    },
+////////////////////////////////////        
+        nxx: {
+        api: 'https://naixxzy.com/api.php/provide/vod/',
+        name: '奶香香',
+        adult: true
+    },
+    dnzy: {
+        api: 'https://apidanaizi.com/api.php/provide/vod',
+        name: '大奶',
+        adult: true
+    },
+    ljzy: {
+        api: 'https://apilj.com/api.php/provide/vod/',
+        name: '辣椒',
+        adult: true
+    },
+    jzy: {
+        api: 'https://www.jingpinx.com/api.php/provide/vod/',
+        name: '精品',
+        adult: true
+    },
+    155: {
+        api: 'https://155api.com/api.php/provide/vod',
+        name: '155资源',
+        adult: true
+    },
 };
 
 // 调用全局方法合并
