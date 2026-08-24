@@ -1,4 +1,12 @@
 const CUSTOMER_SITES = {
+    dyttzy: {
+        api: 'http://caiji.dyttzyapi.com/api.php/provide/vod',
+        name: '电影天堂资源',
+    },
+//    1080: {
+//        api: 'https://api.1080zyku.com/inc/api_mac10.php/provide/vod',
+//        name: '1080资源',
+//    },
     ruyi: {
         api: 'http://cj.rycjapi.com/api.php/provide/vod',
         name: '如意资源',
@@ -59,6 +67,17 @@ const CUSTOMER_SITES = {
         api: 'https://wwzy.tv/api.php/provide/vod',
         name: '旺旺短剧',
     },
+//    askzy: {
+//        api: 'http://aosikazy.com/api.php/provide/vod',
+//        name: '奥斯卡',
+//        adult: true
+//    },
+//    slzy: {
+//        api: 'https://slapibf.com/api.php/provide/vod',
+//        name: '森林',
+//        adult: true
+//    },
+//
     xjzy: {
         api: 'https://api.xiaojizy.live/provide/vod',
         name: '小鸡',
@@ -79,12 +98,35 @@ const CUSTOMER_SITES = {
         name: '玉兔',
         adult: true
     },
-    155zy: {
-        api: 'https://155api.com/api.php/provide/vod ',
-        name: '155',
+ 
+        
+       
+////////////////////////////////////        
+        nxx: {
+        api: 'https://naixxzy.com/api.php/provide/vod/',
+        name: '奶香香',
         adult: true
     },
-
+    dnzy: {
+        api: 'https://apidanaizi.com/api.php/provide/vod',
+        name: '大奶',
+        adult: true
+    },
+    ljzy: {
+        api: 'https://apilj.com/api.php/provide/vod/',
+        name: '辣椒',
+        adult: true
+    },
+    jzy: {
+        api: 'https://www.jingpinx.com/api.php/provide/vod/',
+        name: '精品',
+        adult: true
+    },
+    155: {
+        api: 'https://155api.com/api.php/provide/vod',
+        name: '155资源',
+        adult: true
+    },
 };
 
 // 调用全局方法合并
