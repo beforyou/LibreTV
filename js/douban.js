@@ -421,17 +421,18 @@ function renderRecommend(tag, pageLimit, pageStart) {
     container.classList.add("relative");
     container.insertAdjacentHTML('beforeend', loadingOverlayHTML);
 
-    // 保险：超时强制移除loading，防止永久卡死 4秒
+    // 超时保险，最多5秒强制关闭loading
     const forceLoadingTimeout = setTimeout(() => {
         const loadingEl = document.getElementById('douban-loading');
         if(loadingEl) loadingEl.remove();
-    },4000);
+    },5000);
 
     const target = `https://movie.douban.com/j/search_subjects?type=${doubanMovieTvCurrentSwitch}&tag=${tag}&sort=recommend&page_limit=${pageLimit}&page_start=${pageStart}`;
 
     fetchDoubanData(target)
-        .then(async (data) => {
-            await renderDoubanCards(data, container);
+        .then((data) => {
+            // 同步渲染DOM，标题文字立刻出来，不await阻塞
+            renderDoubanCards(data, container);
         })
         .catch(error => {
             console.error("获取豆瓣数据失败：", error);
@@ -450,8 +451,9 @@ function renderRecommend(tag, pageLimit, pageStart) {
 }
 
 // 抽取渲染豆瓣卡片的逻辑到单独函数
-async function renderDoubanCards(data, container) {
+function renderDoubanCards(data, container) {
     const fragment = document.createDocumentFragment();
+    // 兜底占位图
     const fallbackImage = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iIzIyMiIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNjY2IiBmb250LXNpemU9IjE0Ij7nlLXlhbHvvIg8L3RleHQ+PC9zdmc+';
 
     if (!data.subjects || data.subjects.length === 0) {
@@ -460,31 +462,7 @@ async function renderDoubanCards(data, container) {
         emptyEl.innerHTML = `<div class="text-pink-500">❌ 暂无数据，请尝试其他分类或刷新</div>`;
         fragment.appendChild(emptyEl);
     } else {
-        // 预批量处理所有图片代理链接，带异常捕获
-        const itemList = [...data.subjects];
-        // 并发处理鉴权，单个失败不打断整体
-        const processPromises = itemList.map(async (item)=>{
-            let proxiedCoverUrl;
-            const originalCoverUrl = item.cover;
-            try{
-                if(window.ProxyAuth?.addAuthToProxyUrl){
-                    proxiedCoverUrl = await window.ProxyAuth.addAuthToProxyUrl(PROXY_URL + encodeURIComponent(originalCoverUrl));
-                }else{
-                    proxiedCoverUrl = PROXY_URL + encodeURIComponent(originalCoverUrl);
-                }
-            }catch(err){
-                console.warn("图片鉴权处理失败，降级普通代理",err);
-                proxiedCoverUrl = PROXY_URL + encodeURIComponent(originalCoverUrl);
-            }
-            return {...item, _proxiedImg:proxiedCoverUrl};
-        });
-        // 等待全部图片url处理完成
-        const processedItems = await Promise.allSettled(processPromises);
-
-        processedItems.forEach(res=>{
-            if(res.status !== 'fulfilled') return;
-            const item = res.value;
-
+        data.subjects.forEach((item)=>{
             const card = document.createElement("div");
             card.className = "bg-[#111] hover:bg-[#222] transition-all duration-300 rounded-lg overflow-hidden flex flex-col transform hover:scale-105 shadow-md hover:shadow-lg";
 
@@ -497,9 +475,12 @@ async function renderDoubanCards(data, container) {
                 .replace(/</g, '&lt;')
                 .replace( />/g, '&gt;');
 
+            const originalCoverUrl = item.cover;
+
+            // 先渲染：使用占位图，保证卡片、标题立刻可见
             card.innerHTML = `
                 <div class="relative w-full aspect-[2/3] overflow-hidden cursor-pointer" onclick="fillAndSearchWithDouban('${safeTitle}')">
-                    <img src="${item._proxiedImg}" alt="${safeTitle}" 
+                    <img data-douban-img="${encodeURIComponent(originalCoverUrl)}" src="${fallbackImage}" alt="${safeTitle}" 
                         class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                         onerror="this.onerror=null;this.src='${fallbackImage}';this.classList.add('object-contain');"
                         loading="lazy" referrerpolicy="no-referrer">
@@ -520,9 +501,26 @@ async function renderDoubanCards(data, container) {
             fragment.appendChild(card);
         });
     }
+
     container.innerHTML = "";
     container.appendChild(fragment);
+
+    // DOM渲染完成之后，异步批量更新真实图片，不阻塞页面，标题已经显示出来
+    const imgNodes = container.querySelectorAll('img[data-douban-img]');
+    imgNodes.forEach(async (imgEl)=>{
+        try{
+            const rawUrl = decodeURIComponent(imgEl.getAttribute('data-douban-img'));
+            let proxiedUrl = PROXY_URL + encodeURIComponent(rawUrl);
+            if(window.ProxyAuth?.addAuthToProxyUrl){
+                proxiedUrl = await window.ProxyAuth.addAuthToProxyUrl(proxiedUrl);
+            }
+            imgEl.src = proxiedUrl;
+        }catch(e){
+            console.warn('海报加载失败',e);
+        }
+    });
 }
+
 
 
 // 重置到首页
