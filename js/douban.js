@@ -421,6 +421,12 @@ function renderRecommend(tag, pageLimit, pageStart) {
     container.classList.add("relative");
     container.insertAdjacentHTML('beforeend', loadingOverlayHTML);
 
+    // 保险：超时强制移除loading，防止永久卡死 4秒
+    const forceLoadingTimeout = setTimeout(() => {
+        const loadingEl = document.getElementById('douban-loading');
+        if(loadingEl) loadingEl.remove();
+    },4000);
+
     const target = `https://movie.douban.com/j/search_subjects?type=${doubanMovieTvCurrentSwitch}&tag=${tag}&sort=recommend&page_limit=${pageLimit}&page_start=${pageStart}`;
 
     fetchDoubanData(target)
@@ -437,7 +443,7 @@ function renderRecommend(tag, pageLimit, pageStart) {
             `;
         })
         .finally(()=>{
-            // 无论成功失败都移除loading遮罩
+            clearTimeout(forceLoadingTimeout);
             const loadingEl = document.getElementById('douban-loading');
             if(loadingEl) loadingEl.remove();
         });
@@ -445,46 +451,55 @@ function renderRecommend(tag, pageLimit, pageStart) {
 
 // 抽取渲染豆瓣卡片的逻辑到单独函数
 async function renderDoubanCards(data, container) {
-    // 创建文档片段以提高性能
     const fragment = document.createDocumentFragment();
-    // 兜底占位图，代理失效时显示
     const fallbackImage = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iIzIyMiIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNjY2IiBmb250LXNpemU9IjE0Ij7nlLXlhbHvvIg8L3RleHQ+PC9zdmc+';
 
-    // 如果没有数据
     if (!data.subjects || data.subjects.length === 0) {
         const emptyEl = document.createElement("div");
         emptyEl.className = "col-span-full text-center py-8";
-        emptyEl.innerHTML = `
-            <div class="text-pink-500">❌ 暂无数据，请尝试其他分类或刷新</div>
-        `;
+        emptyEl.innerHTML = `<div class="text-pink-500">❌ 暂无数据，请尝试其他分类或刷新</div>`;
         fragment.appendChild(emptyEl);
     } else {
-        for(const item of data.subjects){
+        // 预批量处理所有图片代理链接，带异常捕获
+        const itemList = [...data.subjects];
+        // 并发处理鉴权，单个失败不打断整体
+        const processPromises = itemList.map(async (item)=>{
+            let proxiedCoverUrl;
+            const originalCoverUrl = item.cover;
+            try{
+                if(window.ProxyAuth?.addAuthToProxyUrl){
+                    proxiedCoverUrl = await window.ProxyAuth.addAuthToProxyUrl(PROXY_URL + encodeURIComponent(originalCoverUrl));
+                }else{
+                    proxiedCoverUrl = PROXY_URL + encodeURIComponent(originalCoverUrl);
+                }
+            }catch(err){
+                console.warn("图片鉴权处理失败，降级普通代理",err);
+                proxiedCoverUrl = PROXY_URL + encodeURIComponent(originalCoverUrl);
+            }
+            return {...item, _proxiedImg:proxiedCoverUrl};
+        });
+        // 等待全部图片url处理完成
+        const processedItems = await Promise.allSettled(processPromises);
+
+        processedItems.forEach(res=>{
+            if(res.status !== 'fulfilled') return;
+            const item = res.value;
+
             const card = document.createElement("div");
             card.className = "bg-[#111] hover:bg-[#222] transition-all duration-300 rounded-lg overflow-hidden flex flex-col transform hover:scale-105 shadow-md hover:shadow-lg";
-            
-            // 生成卡片内容，确保安全显示（防止XSS）
+
             const safeTitle = item.title
                 .replace(/</g, '&lt;')
                 .replace( />/g, '&gt;')
                 .replace(/"/g, '&quot;');
-            
+
             const safeRate = (item.rate || "暂无")
                 .replace(/</g, '&lt;')
                 .replace( />/g, '&gt;');
-            
-            const originalCoverUrl = item.cover;
-            // 图片代理同样调用鉴权接口，解决401未授权
-            let proxiedCoverUrl;
-            if(window.ProxyAuth?.addAuthToProxyUrl){
-                proxiedCoverUrl = await window.ProxyAuth.addAuthToProxyUrl(PROXY_URL + encodeURIComponent(originalCoverUrl));
-            }else{
-                proxiedCoverUrl = PROXY_URL + encodeURIComponent(originalCoverUrl);
-            }
 
             card.innerHTML = `
                 <div class="relative w-full aspect-[2/3] overflow-hidden cursor-pointer" onclick="fillAndSearchWithDouban('${safeTitle}')">
-                    <img src="${proxiedCoverUrl}" alt="${safeTitle}" 
+                    <img src="${item._proxiedImg}" alt="${safeTitle}" 
                         class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                         onerror="this.onerror=null;this.src='${fallbackImage}';this.classList.add('object-contain');"
                         loading="lazy" referrerpolicy="no-referrer">
@@ -493,24 +508,18 @@ async function renderDoubanCards(data, container) {
                         <span class="text-yellow-400">★</span> ${safeRate}
                     </div>
                     <div class="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded-sm hover:bg-[#333] transition-colors">
-                        <a href="${item.url}" target="_blank" rel="noopener noreferrer" title="在豆瓣查看" onclick="event.stopPropagation();">
-                            🔗
-                        </a>
+                        <a href="${item.url}" target="_blank" rel="noopener noreferrer" title="在豆瓣查看" onclick="event.stopPropagation();">🔗</a>
                     </div>
                 </div>
                 <div class="p-2 text-center bg-[#111]">
                     <button onclick="fillAndSearchWithDouban('${safeTitle}')" 
                             class="text-sm font-medium text-white truncate w-full hover:text-pink-400 transition"
-                            title="${safeTitle}">
-                        ${safeTitle}
-                    </button>
+                            title="${safeTitle}">${safeTitle}</button>
                 </div>
             `;
             fragment.appendChild(card);
-        }
+        });
     }
-    
-    // 清空并添加所有新元素
     container.innerHTML = "";
     container.appendChild(fragment);
 }
