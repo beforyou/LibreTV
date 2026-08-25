@@ -410,28 +410,24 @@ function fetchDoubanTags() {
 function renderRecommend(tag, pageLimit, pageStart) {
     const container = document.getElementById("douban-results");
     if (!container) return;
+
     const loadingOverlayHTML = `
-        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-10" id="douban-loading">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-10">
             <div class="flex items-center justify-center">
                 <div class="w-6 h-6 border-2 border-pink-500 border-t-transparent rounded-full animate-spin inline-block"></div>
                 <span class="text-pink-500 ml-4">加载中...</span>
             </div>
         </div>
     `;
+
     container.classList.add("relative");
     container.insertAdjacentHTML('beforeend', loadingOverlayHTML);
-
-    // 超时保险，最多5秒强制关闭loading
-    const forceLoadingTimeout = setTimeout(() => {
-        const loadingEl = document.getElementById('douban-loading');
-        if(loadingEl) loadingEl.remove();
-    },5000);
-
+    
     const target = `https://movie.douban.com/j/search_subjects?type=${doubanMovieTvCurrentSwitch}&tag=${tag}&sort=recommend&page_limit=${pageLimit}&page_start=${pageStart}`;
-
+    
+    // 使用通用请求函数
     fetchDoubanData(target)
-        .then((data) => {
-            // 同步渲染DOM，标题文字立刻出来，不await阻塞
+        .then(data => {
             renderDoubanCards(data, container);
         })
         .catch(error => {
@@ -442,86 +438,139 @@ function renderRecommend(tag, pageLimit, pageStart) {
                     <div class="text-gray-500 text-sm mt-2">提示：使用VPN可能有助于解决此问题</div>
                 </div>
             `;
-        })
-        .finally(()=>{
-            clearTimeout(forceLoadingTimeout);
-            const loadingEl = document.getElementById('douban-loading');
-            if(loadingEl) loadingEl.remove();
         });
+}
+
+async function fetchDoubanData(url) {
+    // 添加超时控制
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10秒超时
+    
+    // 设置请求选项，包括信号和头部
+    const fetchOptions = {
+        signal: controller.signal,
+        headers: {
+           // 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
+            
+            'Referer': 'https://movie.douban.com/',
+            'Accept': 'application/json, text/plain, */*',
+        }
+    };
+
+    try {
+        // 添加鉴权参数到代理URL
+        const proxiedUrl = await window.ProxyAuth?.addAuthToProxyUrl ? 
+            await window.ProxyAuth.addAuthToProxyUrl(PROXY_URL + encodeURIComponent(url)) :
+            PROXY_URL + encodeURIComponent(url);
+            
+        // 尝试直接访问（豆瓣API可能允许部分CORS请求）
+        const response = await fetch(proxiedUrl, fetchOptions);
+        clearTimeout(timeoutId);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        
+        return await response.json();
+    } catch (err) {
+        console.error("豆瓣 API 请求失败（直接代理）：", err);
+        
+        // 失败后尝试备用方法：作为备选
+        const fallbackUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+        
+        try {
+            const fallbackResponse = await fetch(fallbackUrl);
+            
+            if (!fallbackResponse.ok) {
+                throw new Error(`备用API请求失败! 状态: ${fallbackResponse.status}`);
+            }
+            
+            const data = await fallbackResponse.json();
+            
+            // 解析原始内容
+            if (data && data.contents) {
+                return JSON.parse(data.contents);
+            } else {
+                throw new Error("无法获取有效数据");
+            }
+        } catch (fallbackErr) {
+            console.error("豆瓣 API 备用请求也失败：", fallbackErr);
+            throw fallbackErr; // 向上抛出错误，让调用者处理
+        }
+    }
 }
 
 // 抽取渲染豆瓣卡片的逻辑到单独函数
 function renderDoubanCards(data, container) {
+    // 创建文档片段以提高性能
     const fragment = document.createDocumentFragment();
-    // 兜底占位图
-    const fallbackImage = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iIzIyMiIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNjY2IiBmb250LXNpemU9IjE0Ij7nlLXlhbHvvIg8L3RleHQ+PC9zdmc+';
-
+    
+    // 如果没有数据
     if (!data.subjects || data.subjects.length === 0) {
         const emptyEl = document.createElement("div");
         emptyEl.className = "col-span-full text-center py-8";
-        emptyEl.innerHTML = `<div class="text-pink-500">❌ 暂无数据，请尝试其他分类或刷新</div>`;
+        emptyEl.innerHTML = `
+            <div class="text-pink-500">❌ 暂无数据，请尝试其他分类或刷新</div>
+        `;
         fragment.appendChild(emptyEl);
     } else {
-        data.subjects.forEach((item)=>{
+        // 循环创建每个影视卡片
+        data.subjects.forEach(item => {
             const card = document.createElement("div");
             card.className = "bg-[#111] hover:bg-[#222] transition-all duration-300 rounded-lg overflow-hidden flex flex-col transform hover:scale-105 shadow-md hover:shadow-lg";
-
+            
+            // 生成卡片内容，确保安全显示（防止XSS）
             const safeTitle = item.title
                 .replace(/</g, '&lt;')
-                .replace( />/g, '&gt;')
+                .replace(/>/g, '&gt;')
                 .replace(/"/g, '&quot;');
-
+            
             const safeRate = (item.rate || "暂无")
                 .replace(/</g, '&lt;')
-                .replace( />/g, '&gt;');
-
+                .replace(/>/g, '&gt;');
+            
+            // 处理图片URL
+            // 1. 直接使用豆瓣图片URL (添加no-referrer属性)
             const originalCoverUrl = item.cover;
-
-            // 先渲染：使用占位图，保证卡片、标题立刻可见
+            
+            // 2. 也准备代理URL作为备选
+            const proxiedCoverUrl = PROXY_URL + encodeURIComponent(originalCoverUrl);
+            
+            // 为不同设备优化卡片布局
             card.innerHTML = `
                 <div class="relative w-full aspect-[2/3] overflow-hidden cursor-pointer" onclick="fillAndSearchWithDouban('${safeTitle}')">
-                    <img data-douban-img="${encodeURIComponent(originalCoverUrl)}" src="${fallbackImage}" alt="${safeTitle}" 
+                    <img src="${originalCoverUrl}" alt="${safeTitle}" 
                         class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-                        onerror="this.onerror=null;this.src='${fallbackImage}';this.classList.add('object-contain');"
+                        onerror="this.onerror=null; this.src='${proxiedCoverUrl}'; this.classList.add('object-contain');"
                         loading="lazy" referrerpolicy="no-referrer">
                     <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60"></div>
                     <div class="absolute bottom-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded-sm">
                         <span class="text-yellow-400">★</span> ${safeRate}
                     </div>
                     <div class="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded-sm hover:bg-[#333] transition-colors">
-                        <a href="${item.url}" target="_blank" rel="noopener noreferrer" title="在豆瓣查看" onclick="event.stopPropagation();">🔗</a>
+                        <a href="${item.url}" target="_blank" rel="noopener noreferrer" title="在豆瓣查看" onclick="event.stopPropagation();">
+                            🔗
+                        </a>
                     </div>
                 </div>
                 <div class="p-2 text-center bg-[#111]">
                     <button onclick="fillAndSearchWithDouban('${safeTitle}')" 
                             class="text-sm font-medium text-white truncate w-full hover:text-pink-400 transition"
-                            title="${safeTitle}">${safeTitle}</button>
+                            title="${safeTitle}">
+                        ${safeTitle}
+                    </button>
                 </div>
             `;
+            
             fragment.appendChild(card);
         });
     }
-
+    
+    // 清空并添加所有新元素
     container.innerHTML = "";
     container.appendChild(fragment);
-
-    // DOM渲染完成之后，异步批量更新真实图片，不阻塞页面，标题已经显示出来
-    const imgNodes = container.querySelectorAll('img[data-douban-img]');
-    imgNodes.forEach(async (imgEl)=>{
-        try{
-            const rawUrl = decodeURIComponent(imgEl.getAttribute('data-douban-img'));
-            let proxiedUrl = PROXY_URL + encodeURIComponent(rawUrl);
-            if(window.ProxyAuth?.addAuthToProxyUrl){
-                proxiedUrl = await window.ProxyAuth.addAuthToProxyUrl(proxiedUrl);
-            }
-            imgEl.src = proxiedUrl;
-        }catch(e){
-            console.warn('海报加载失败',e);
-        }
-    });
 }
-
-
 
 // 重置到首页
 function resetToHome() {
